@@ -34,5 +34,9 @@
     margin: 5px 10px;
 }
 
+.result {
+    margin-left: 40px;
+}
+
 /* pretty gradients */
 /* we should only add a row if it's not default - + 0 0?

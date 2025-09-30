@@ -342,8 +342,10 @@ let library = {
   "*": (a, b) => a * b,
   "/": (a, b) => a / b,
   "%": (a, b) => a % b,
-  "pow": (a, b) => Math.pow(a,b),
-  "first": (...args) => {args[0]},
+  pow: (a, b) => Math.pow(a, b),
+  first: (...args) => {
+    args[0];
+  },
 };
 
 function outputJSON(input) {
@@ -385,7 +387,7 @@ function expressionFromState(state) {
 }
 
 function interpret(expression) {
-  console.log(expression);
+  //console.log(expression);
   if (Array.isArray(expression) && expression.length > 0) {
     let op = library[expression[0]];
 
@@ -413,10 +415,12 @@ function run(input) {
 }
 
 // Input is Flavius's input from MIDI
-function displayWebpage(input) {
-  let lispJson = outputJSON(input);
+let lispJson;
 
+function displayWebpage(input) {
   const page = document.getElementById("page");
+  lispJson = outputJSON(input);
+  console.log(lispJson);
 
   page.innerHTML = "";
 
@@ -437,14 +441,24 @@ function displayWebpage(input) {
     // expression
     const expDiv = document.createElement("div");
     expDiv.classList.add("exp");
-    for (i in lispJson[key]) {
+    console.log(lispJson[key].expression);
+
+    for (i in lispJson[key].expression) {
       const expComponentDiv = document.createElement("div");
       expComponentDiv.classList.add("expComponent", "node");
-      const expComponentText = document.createTextNode(lispJson[key][i]);
+      const expComponentText = document.createTextNode(
+        lispJson[key].expression[i]
+      );
       expComponentDiv.appendChild(expComponentText);
       expDiv.appendChild(expComponentDiv);
     }
     rowDiv.appendChild(expDiv);
+
+    const resultDiv = document.createElement("div");
+    resultDiv.classList.add("expComponent", "result", "node");
+    const resultDivText = document.createTextNode(lispJson[key].result);
+    resultDiv.appendChild(resultDivText);
+    rowDiv.appendChild(resultDiv);
 
     page.appendChild(rowDiv);
   };
