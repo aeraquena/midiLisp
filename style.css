@@ -8,7 +8,7 @@
 }
 
 .varOuter {
-    width: 200px;
+    width: 180px;
 }
 
 .var {
@@ -36,6 +36,11 @@
 
 .result {
     margin-left: 40px;
+    background-color: #ddd;
+}
+
+.var {
+    background-color: #ddd;
 }
 
 /* pretty gradients */

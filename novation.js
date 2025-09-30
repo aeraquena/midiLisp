@@ -334,6 +334,7 @@ let OP_MAP = {
   4: "%",
   5: "pow",
   6: "first",
+  7: "last",
 };
 
 let library = {
@@ -343,9 +344,8 @@ let library = {
   "/": (a, b) => a / b,
   "%": (a, b) => a % b,
   pow: (a, b) => Math.pow(a, b),
-  first: (...args) => {
-    args[0];
-  },
+  first: (...args) => args[0],
+  last: (...args) => args[args.length - 1],
 };
 
 function outputJSON(input) {
