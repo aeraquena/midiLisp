@@ -26,6 +26,25 @@ function outputJSON(input) {
     return json;
 };
 
+function jsonFromState(state) {
+    let json = {};
+
+    let expression = [];
+
+    expression.push(OP_MAP[state.op]);
+    state.args.forEach(arg => {
+        let type = TYPE_MAP[arg.type];
+        if (type == 'int') {
+            expression.push(arg.val);
+        } else {
+            //Ref
+            expression.push(REF_MAP[arg.val])
+        }
+    });
+
+    return expression;
+}
+
 function expressionFromState(state) {
     let expression = [];
 
