@@ -343,7 +343,7 @@ let library = {
   "/": (a, b) => a / b,
   "%": (a, b) => a % b,
   "pow": (a, b) => Math.pow(a,b),
-  "first": () => arguments[0],
+  "first": (...args) => {args[0]},
 };
 
 function outputJSON(input) {
