@@ -1,14 +1,85 @@
-const lispJson = {
-  main: ["+", "a", "b"],
-  a: ["+", 1, 2],
-  b: ["+", "a", "a"],
-  c: ["+", 0, 0],
-  d: ["+", 0, 0],
-  e: ["+", 0, 0],
-  f: ["+", 0, 0],
-  g: ["+", 0, 0],
-  h: ["+", 0, 0],
+let input = {
+    main: {op: 0, args: [{type: 0, val: 2},{type: 1, val: 0}]},
+    memory: [
+        {op: 1, args: [{type: 0, val: 3},{type: 1, val: 1}]},
+        {op: 0, args: [{type: 0, val: 4},{type: 0, val: 5}]},
+    ]
 };
+
+let OP_MAP = {
+    0: '+',
+    1: '-'
+}
+let TYPE_MAP = ['int', 'ref'];
+let REF_MAP = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'];
+
+function outputJSON(input) {
+
+    let json = {};
+    json['main'] = expressionFromState(input.main);
+
+    input.memory.forEach((bank, index) => {
+        let ref = REF_MAP[index];
+        json[ref] = expressionFromState(bank);
+    });
+
+    return json;
+};
+
+function expressionFromState(state) {
+    let expression = [];
+
+    expression.push(OP_MAP[state.op]);
+    state.args.forEach(arg => {
+        let type = TYPE_MAP[arg.type];
+        if (type == 'int') {
+            expression.push(arg.val);
+        } else {
+            //Ref
+            expression.push(REF_MAP[arg.val])
+        }
+    });
+
+    return expression;
+}
+
+let library = {
+    '+': (a,b) => a+b,
+    '-': (a,b) => a-b,
+};
+
+function interpret(expression) {
+
+    console.log(expression);
+    if (Array.isArray(expression) && expression.length > 0) {
+        let op = library[expression[0]];
+        
+        if (op) {
+            let args = expression.slice(1).map(interpret);
+            return op.apply(null, args);
+        }
+    } else if (typeof expression === 'string' && expression.match(/[a-h]/)){
+      let sub = library[expression];
+      return interpret(sub);
+    } else {
+        return expression;
+    }
+};
+
+function run(input) {
+
+    let main = expressionFromState(input.main);
+
+    input.memory.forEach((bank, index) => {
+        let ref = REF_MAP[index];
+        library[ref] = expressionFromState(bank);
+    });
+
+    return interpret(main);
+};
+
+let lispJson = outputJSON(input);
+
 // event listener -- on receiving update
 
 // Main (current state of the board) can be displayed differently - it's the only thing that changes
@@ -53,3 +124,5 @@ const addRow = (key) => {
 for (key in lispJson) {
   addRow(key);
 }
+
+console.log(run(input));
