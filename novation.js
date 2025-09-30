@@ -306,10 +306,6 @@ if (document.readyState === "loading") {
 };
 */
 
-let OP_MAP = {
-  0: "+",
-  1: "-",
-};
 let TYPE_MAP = ["int", "ref"];
 let REF_MAP = [
   "a",
@@ -329,6 +325,26 @@ let REF_MAP = [
   "o",
   "p",
 ];
+
+let OP_MAP = {
+  0: "+",
+  1: "-",
+  2: "*",
+  3: "/",
+  4: "%",
+  5: "pow",
+  6: "first",
+};
+
+let library = {
+  "+": (a, b) => a + b,
+  "-": (a, b) => a - b,
+  "*": (a, b) => a * b,
+  "/": (a, b) => a / b,
+  "%": (a, b) => a % b,
+  "pow": (a, b) => Math.pow(a,b),
+  "first": () => arguments[0],
+};
 
 function outputJSON(input) {
   let mainResult = run(input);
@@ -367,11 +383,6 @@ function expressionFromState(state) {
 
   return expression;
 }
-
-let library = {
-  "+": (a, b) => a + b,
-  "-": (a, b) => a - b,
-};
 
 function interpret(expression) {
   console.log(expression);
