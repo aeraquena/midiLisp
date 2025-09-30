@@ -15,35 +15,26 @@ let REF_MAP = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
 
 function outputJSON(input) {
 
+    let mainResult = run(input);
+
     let json = {};
-    json['main'] = expressionFromState(input.main);
+    json['main'] = {
+      expression: expressionFromState(input.main),
+      result: mainResult
+    };
 
     input.memory.forEach((bank, index) => {
         let ref = REF_MAP[index];
-        json[ref] = expressionFromState(bank);
+        let e = expressionFromState(bank);
+        json[ref] = {
+          expression: e,
+          result: interpret(e)
+        }
     });
 
     return json;
 };
 
-function jsonFromState(state) {
-    let json = {};
-
-    let expression = [];
-
-    expression.push(OP_MAP[state.op]);
-    state.args.forEach(arg => {
-        let type = TYPE_MAP[arg.type];
-        if (type == 'int') {
-            expression.push(arg.val);
-        } else {
-            //Ref
-            expression.push(REF_MAP[arg.val])
-        }
-    });
-
-    return expression;
-}
 
 function expressionFromState(state) {
     let expression = [];
