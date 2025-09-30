@@ -94,7 +94,7 @@ const page = document.getElementById("page");
 
 const addRow = (key) => {
   const rowDiv = document.createElement("div");
-  rowDiv.classList.add("row");
+  rowDiv.classList.add("row", "row-" + key);
 
   // variable
   const varOuterDiv = document.createElement("div");

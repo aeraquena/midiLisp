@@ -1,5 +1,5 @@
 #page {
-    font-family: 'Helvetica';
+    font-family: 'Futura';
     font-size: 36px;
 }
 
@@ -15,7 +15,7 @@
     font-weight: bold;
 }
 
-.row:nth-child(2) > .varOuter > .var {
+.row.row-a .var.node {
     background-color: '#d53e4f';
 }
 
