@@ -1,0 +1,38 @@
+#page {
+    font-family: 'Helvetica';
+    font-size: 36px;
+}
+
+.row {
+    margin: 10px 0;
+}
+
+.varOuter {
+    width: 200px;
+}
+
+.var {
+    font-weight: bold;
+}
+
+.row:nth-child(2) > .varOuter > .var {
+    background-color: '#d53e4f';
+}
+
+.var,
+.exp,
+.expComponent,
+.varOuter {
+    display: inline-block;
+}
+
+.node {
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 5px 10px;
+}
+
+/* pretty gradients */
+/* we should only add a row if it's not default - + 0 0?
