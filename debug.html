@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+    <head>
+        <title>MIDI LSP</title>
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                margin: 20px;
+                background-color: #1e1e1e;
+                color: #d4d4d4;
+            }
+
+            h1 {
+                color: #4ec9b0;
+                margin-bottom: 5px;
+            }
+
+            h2 {
+                color: #569cd6;
+                margin-top: 30px;
+                margin-bottom: 10px;
+            }
+
+            h3 {
+                color: #dcdcaa;
+                margin-top: 15px;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            .container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .panel {
+                background-color: #252526;
+                border: 1px solid #3e3e42;
+                border-radius: 4px;
+                padding: 15px;
+            }
+
+            #json-display {
+                background-color: #1e1e1e;
+                border: 1px solid #3e3e42;
+                padding: 15px;
+                border-radius: 4px;
+                overflow: auto;
+                max-height: 600px;
+                white-space: pre;
+                font-size: 13px;
+                color: #ce9178;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+                font-size: 13px;
+            }
+
+            th {
+                background-color: #2d2d30;
+                color: #569cd6;
+                padding: 8px;
+                text-align: left;
+                border-bottom: 2px solid #3e3e42;
+            }
+
+            td {
+                padding: 6px 8px;
+                border-bottom: 1px solid #3e3e42;
+            }
+
+            tr:hover {
+                background-color: #2a2d2e;
+            }
+
+            p {
+                margin: 10px 0;
+                line-height: 1.6;
+            }
+
+            strong {
+                color: #dcdcaa;
+            }
+
+            .controls-group {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>MIDI LSP</h1>
+
+        <div class="container">
+            <div class="panel">
+                <h2>Input Object (JSON)</h2>
+                <pre id="json-display">Waiting for MIDI...</pre>
+            </div>
+
+            <div class="panel">
+                <h2>Control Values</h2>
+                <div class="controls-group" id="faders-display"></div>
+                <div class="controls-group" id="types-display"></div>
+                <div class="controls-group" id="vals-display"></div>
+            </div>
+        </div>
+
+        <script src="novation.js"></script>
+    </body>
+</html>
