@@ -158,6 +158,7 @@ function handleControlChange(cc, value) {
 function updateDisplay() {
   updateJSONDisplay();
   updateControlsDisplay();
+  displayWebpage(input);
 }
 
 function updateJSONDisplay() {
@@ -276,4 +277,168 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", updateDisplay);
 } else {
   updateDisplay();
+}
+
+/* let input = {
+  main: {
+    op: 0,
+    args: [
+      { type: 0, val: 2 },
+      { type: 1, val: 0 },
+    ],
+  },
+  banks: [
+    {
+      op: 1,
+      args: [
+        { type: 0, val: 3 },
+        { type: 1, val: 1 },
+      ],
+    },
+    {
+      op: 0,
+      args: [
+        { type: 0, val: 4 },
+        { type: 0, val: 5 },
+      ],
+    },
+  ],
+};
+*/
+
+let OP_MAP = {
+  0: "+",
+  1: "-",
+};
+let TYPE_MAP = ["int", "ref"];
+let REF_MAP = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+];
+
+function outputJSON(input) {
+  let mainResult = run(input);
+
+  let json = {};
+  json["main"] = {
+    expression: expressionFromState(input.main),
+    result: mainResult,
+  };
+
+  input.banks.forEach((bank, index) => {
+    let ref = REF_MAP[index];
+    let e = expressionFromState(bank);
+    json[ref] = {
+      expression: e,
+      result: interpret(e),
+    };
+  });
+
+  return json;
+}
+
+function expressionFromState(state) {
+  let expression = [];
+
+  expression.push(OP_MAP[state.op]);
+  state.args.forEach((arg) => {
+    let type = TYPE_MAP[arg.type];
+    if (type == "int") {
+      expression.push(arg.val);
+    } else {
+      //Ref
+      expression.push(REF_MAP[arg.val]);
+    }
+  });
+
+  return expression;
+}
+
+let library = {
+  "+": (a, b) => a + b,
+  "-": (a, b) => a - b,
+};
+
+function interpret(expression) {
+  console.log(expression);
+  if (Array.isArray(expression) && expression.length > 0) {
+    let op = library[expression[0]];
+
+    if (op) {
+      let args = expression.slice(1).map(interpret);
+      return op.apply(null, args);
+    }
+  } else if (typeof expression === "string" && expression.match(/[a-h]/)) {
+    let sub = library[expression];
+    return interpret(sub);
+  } else {
+    return expression;
+  }
+}
+
+function run(input) {
+  let main = expressionFromState(input.main);
+
+  input.banks.forEach((bank, index) => {
+    let ref = REF_MAP[index];
+    library[ref] = expressionFromState(bank);
+  });
+
+  return interpret(main);
+}
+
+// Input is Flavius's input from MIDI
+function displayWebpage(input) {
+  let lispJson = outputJSON(input);
+
+  const page = document.getElementById("page");
+
+  page.innerHTML = "";
+
+  const addRow = (key) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("row", "row-" + key);
+
+    // variable
+    const varOuterDiv = document.createElement("div");
+    varOuterDiv.classList.add("varOuter");
+    const varDiv = document.createElement("div");
+    varDiv.classList.add("var", "node");
+    const varText = document.createTextNode(key);
+    varDiv.appendChild(varText);
+    varOuterDiv.appendChild(varDiv);
+    rowDiv.appendChild(varOuterDiv);
+
+    // expression
+    const expDiv = document.createElement("div");
+    expDiv.classList.add("exp");
+    for (i in lispJson[key]) {
+      const expComponentDiv = document.createElement("div");
+      expComponentDiv.classList.add("expComponent", "node");
+      const expComponentText = document.createTextNode(lispJson[key][i]);
+      expComponentDiv.appendChild(expComponentText);
+      expDiv.appendChild(expComponentDiv);
+    }
+    rowDiv.appendChild(expDiv);
+
+    page.appendChild(rowDiv);
+  };
+
+  for (key in lispJson) {
+    addRow(key);
+  }
 }
